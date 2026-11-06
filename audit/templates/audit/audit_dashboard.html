@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TrustVault - Audit Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        nav {
+            background: #0f172a;
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .heading {
+            margin-bottom: 25px;
+        }
+
+        .heading h1 {
+            color: #0f172a;
+        }
+
+        .heading p {
+            color: #64748b;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .action {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .back:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h2>TrustVault</h2>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+    </nav>
+
+    <div class="container">
+
+        <div class="heading">
+            <h1>Audit Trail Dashboard</h1>
+            <p>Monitor and review document activities securely.</p>
+        </div>
+
+        <div class="table-container">
+
+            <table>
+                <tr>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Document</th>
+                    <th>Date and Time</th>
+                    <th>Details</th>
+                </tr>
+
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.user|default:"Deleted User" }}</td>
+
+                    <td class="action">
+                        {{ log.action }}
+                    </td>
+
+                    <td>
+                        {{ log.document|default:"Deleted Document" }}
+                    </td>
+
+                    <td>
+                        {{ log.timestamp|date:"d M Y, h:i A" }}
+                    </td>
+
+                    <td>
+                        {{ log.details }}
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="empty">
+                        No audit records found.
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+        <a class="back" href="{% url 'dashboard' %}">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+</body>
+</html>

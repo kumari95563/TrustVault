@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TrustVault | Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .navbar {
+            background: #0f172a;
+            color: white;
+            padding: 20px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logout {
+            background: #2563eb;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+
+        .role {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+        }
+
+        .dashboard-card h2 {
+            color: #1e40af;
+            margin-bottom: 12px;
+        }
+
+        .dashboard-card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 22px;
+        }
+
+        .action-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 13px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 18px;
+            }
+
+            .container {
+                margin: 20px auto;
+            }
+
+            .dashboard-card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="logo">🔐 TrustVault</div>
+
+        <a href="{% url 'user_logout' %}" class="logout">
+            Logout
+        </a>
+    </div>
+
+    <div class="container">
+
+        <div class="welcome">
+            <h1>Welcome to TrustVault</h1>
+
+            <h3>Hello, {{ user.username }}!</h3>
+
+            <span class="role">
+                {{ user.get_role_display }}
+            </span>
+        </div>
+
+        {% if user.role == "ADMIN" %}
+
+            <div class="dashboard-card">
+                <h2>Administrator Dashboard</h2>
+
+                <p>
+                    Welcome, Administrator!
+                    You have administration access to TrustVault.
+                    Monitor documents and review security activities.
+                </p>
+
+                <div class="actions">
+
+                    <a href="{% url 'document_list' %}"
+                       class="action-btn">
+                        Manage Documents
+                    </a>
+
+                    <a href="{% url 'upload_document' %}"
+                       class="action-btn">
+                        Upload Document
+                    </a>
+
+                    <a href="{% url 'audit_dashboard' %}"
+                       class="action-btn">
+                        View Audit Trail
+                    </a>
+
+                </div>
+            </div>
+
+        {% elif user.role == "OWNER" %}
+
+            <div class="dashboard-card">
+                <h2>Document Owner Dashboard</h2>
+
+                <p>
+                    Manage your own documents securely.
+                    Upload documents, share them with viewers
+                    and revoke access whenever required.
+                </p>
+
+                <div class="actions">
+
+                    <a href="{% url 'upload_document' %}"
+                       class="action-btn">
+                        Upload Document
+                    </a>
+
+                    <a href="{% url 'document_list' %}"
+                       class="action-btn">
+                        My Documents
+                    </a>
+
+                </div>
+            </div>
+
+        {% elif user.role == "VIEWER" %}
+
+            <div class="dashboard-card">
+                <h2>Viewer Dashboard</h2>
+
+                <p>
+                    Welcome, Viewer!
+                    You can access and download documents
+                    that have been securely shared with you.
+                </p>
+
+                <div class="actions">
+
+                    <a href="{% url 'document_list' %}"
+                       class="action-btn">
+                        View Shared Documents
+                    </a>
+
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <div class="footer">
+        Protected Document Access | TrustVault
+    </div>
+
+</body>
+</html>
