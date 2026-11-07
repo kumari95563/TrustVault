@@ -14,8 +14,13 @@ def audit_dashboard(request):
         "document"
     ).order_by("-timestamp")
 
+    chain_valid = AuditLog.verify_chain()
+
     return render(
         request,
         "audit/audit_dashboard.html",
-        {"logs": logs}
+        {
+            "logs": logs,
+            "chain_valid": chain_valid
+        }
     )

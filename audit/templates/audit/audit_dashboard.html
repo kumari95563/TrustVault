@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,6 +53,29 @@
 
         .heading p {
             color: #64748b;
+        }
+
+        .verification {
+            background: white;
+            padding: 22px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .verification h2 {
+            margin-top: 0;
+            color: #0f172a;
+        }
+
+        .success {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .failure {
+            color: #dc2626;
+            font-weight: bold;
         }
 
         .table-container {
@@ -109,13 +133,24 @@
         .back:hover {
             background: #1d4ed8;
         }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 15px auto;
+                padding: 12px;
+            }
+
+            nav {
+                padding: 18px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <nav>
-        <h2>TrustVault</h2>
+        <h2>🔐 TrustVault</h2>
         <a href="{% url 'dashboard' %}">Dashboard</a>
     </nav>
 
@@ -126,9 +161,38 @@
             <p>Monitor and review document activities securely.</p>
         </div>
 
+        <!-- Audit Hash Chain Verification -->
+
+        <div class="verification">
+
+            <h2>Audit Integrity Verification</h2>
+
+            {% if chain_valid %}
+
+                <p class="success">
+                    ✓ Audit Hash Chain Verified Successfully
+                </p>
+
+                <p>All audit records passed the hash-chain verification.</p>
+
+            {% else %}
+
+                <p class="failure">
+                    ✗ Audit Hash Chain Verification Failed
+                </p>
+
+                <p>Warning: Audit records may have been modified.</p>
+
+            {% endif %}
+
+        </div>
+
+        <!-- Audit Records Table -->
+
         <div class="table-container">
 
             <table>
+
                 <tr>
                     <th>User</th>
                     <th>Action</th>
@@ -138,8 +202,12 @@
                 </tr>
 
                 {% for log in logs %}
+
                 <tr>
-                    <td>{{ log.user|default:"Deleted User" }}</td>
+
+                    <td>
+                        {{ log.user|default:"Deleted User" }}
+                    </td>
 
                     <td class="action">
                         {{ log.action }}
@@ -156,14 +224,17 @@
                     <td>
                         {{ log.details }}
                     </td>
+
                 </tr>
 
                 {% empty %}
+
                 <tr>
                     <td colspan="5" class="empty">
                         No audit records found.
                     </td>
                 </tr>
+
                 {% endfor %}
 
             </table>
