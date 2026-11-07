@@ -132,6 +132,12 @@ def download_document(request, document_id):
         ).exists()
 
     if not allowed:
+        AuditLog.objects.create(
+            user=request.user,
+            action="DENIED_ACCESS",
+            document=document,
+            details="Unauthorized document download attempt"
+        )
         raise PermissionDenied
     AuditLog.objects.create(
         user=request.user,
