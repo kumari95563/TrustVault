@@ -214,7 +214,11 @@
                     </td>
 
                     <td>
-                        {{ log.document|default:"Deleted Document" }}
+                        {% if log.document %}
+                            {{ log.document }}
+                        {% else %}
+                            —
+                        {% endif %}
                     </td>
 
                     <td>

@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TrustVault - Secure Invitation</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        nav {
+            background: #0f172a;
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            font-size: 24px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 55px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+        }
+
+        .icon {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #0f172a;
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 9px;
+            color: #334155;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            margin-bottom: 22px;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 13px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 9px;
+        }
+
+        .success h3 {
+            color: #15803d;
+            margin-bottom: 10px;
+        }
+
+        .success p {
+            color: #475569;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .invitation-link {
+            background: #f8fafc;
+            font-size: 13px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 20px;
+            font-size: 13px;
+        }
+
+        @media(max-width: 600px) {
+            nav {
+                padding: 18px;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+            .card {
+                padding: 23px;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h2>🔐 TrustVault</h2>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+    </nav>
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="icon">🔒</div>
+
+            <h1>Secure Invitation</h1>
+
+            <p class="subtitle">
+                Invite trusted users to access TrustVault.
+                Assign secure roles and control document permissions.
+            </p>
+
+            {% if error %}
+                <div class="error">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label>Email Address</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter user's email address"
+                    required
+                >
+
+                <label>Select User Role</label>
+
+                <select name="role" required>
+                    <option value="OWNER">Document Owner</option>
+                    <option value="VIEWER">Document Viewer</option>
+                </select>
+
+                <button type="submit">
+                    Generate Secure Invitation
+                </button>
+            </form>
+
+            {% if invitation_link %}
+
+                <div class="success">
+
+                    <h3>✓ Invitation Created Successfully!</h3>
+
+                    <p>
+                        Share this secure invitation link with the invited user.
+                        This link expires after 24 hours and can be used only once.
+                    </p>
+
+                    <input
+                        class="invitation-link"
+                        type="text"
+                        value="{{ invitation_link }}"
+                        readonly
+                    >
+
+                </div>
+
+            {% endif %}
+
+            <a class="back" href="{% url 'dashboard' %}">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+    <footer>
+        Protected Document Access | TrustVault
+    </footer>
+
+</body>
+</html>

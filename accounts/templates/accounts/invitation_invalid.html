@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault - Invalid Invitation</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            background: #0f172a;
+            color: white;
+            padding: 20px 7%;
+        }
+
+        nav h2 {
+            font-size: 24px;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .card {
+            background: white;
+            max-width: 520px;
+            width: 100%;
+            padding: 40px 30px;
+            text-align: center;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+        }
+
+        .icon {
+            font-size: 55px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #0f172a;
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .warning {
+            background: #fff7ed;
+            color: #c2410c;
+            padding: 14px;
+            border-radius: 8px;
+            margin: 22px 0;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 13px 25px;
+            border-radius: 7px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 20px;
+            font-size: 13px;
+        }
+
+        @media(max-width: 600px) {
+            .card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h2>🔐 TrustVault</h2>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+
+            <div class="icon">⚠️</div>
+
+            <h1>Invitation Expired or Invalid</h1>
+
+            <p class="message">
+                This invitation link is invalid, expired, or has already been used.
+            </p>
+
+            <div class="warning">
+                For security reasons, each invitation can be used only once
+                and expires after 24 hours.
+            </div>
+
+            <p class="message">
+                Please contact the TrustVault Administrator to request a new invitation.
+            </p>
+
+            <a class="button" href="{% url 'user_login' %}">
+                Back to Login
+            </a>
+
+        </div>
+    </div>
+
+    <footer>
+        Protected Document Access | TrustVault
+    </footer>
+
+</body>
+</html>

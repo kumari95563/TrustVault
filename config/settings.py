@@ -140,10 +140,22 @@ MEDIA_ROOT = BASE_DIR / "private_media"
 
 # Login and logout
 LOGIN_URL = "/accounts/login/"
+PASSWORD_RESET_TIMEOUT = 1800
 
-# Email
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Email# Email Configuration
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend"
+)
 
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Production security
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
