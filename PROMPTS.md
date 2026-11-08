@@ -2,82 +2,138 @@
 
 This document records how AI assistance was used during the development of TrustVault. Prompt summaries are paraphrased and are not presented as exact quotations.
 
-## 1. Django project setup and configuration
+## 1. Django Project Setup and Configuration
 
 **Date:** 2026-11-01
 
-**Prompt summary:** Help set up the Django project, configure the custom user model, and connect the accounts and documents applications.
+**Prompt Summary:**  
+Help set up the Django project, configure the custom user model, and connect the accounts and documents applications.
 
-**AI output:** Suggested Django configuration, app structure, and migration commands.
+**AI Output:**  
+Provided Django project setup instructions, application configuration, custom user model guidance, and database migration commands.
 
-**AI mistake / limitation:** An incorrect `dotenv` import name (`load_dotenvs`) was suggested during configuration.
+**AI Mistake:**  
+Initially suggested an incorrect environment-loading function (`load_dotenvs`).
 
-**Fix:** Corrected the import to `load_dotenv` and verified the project using `python manage.py check`.
+**Fix:**  
+Corrected it to use `load_dotenv` and verified that the project settings loaded correctly.
 
-**Related commit:** https://github.com/kumari95563/TrustVault/commit/c957ae1
+## 2. Document Upload and Access Control
 
-## 2. Document upload and access control
+**Date:** 2026-11-02
+
+**Prompt Summary:**  
+Implement secure document upload, document listing, sharing permissions, and protected downloads for document owners and viewers.
+
+**AI Output:**  
+Provided Django models, views, URL configuration, templates, and server-side permission checks.
+
+**AI Limitation:**  
+Initial guidance did not sufficiently emphasize testing direct download URLs after permission revocation.
+
+**Fix:**  
+Added server-side authorization checks and tested direct URL access. Unauthorized users receive HTTP 403 Forbidden.
+
+## 3. GitHub Repository Setup
+
+**Date:** 2026-11-03
+
+**Prompt Summary:**  
+Help configure Git, create a GitHub repository, commit project files, and push the Django application.
+
+**AI Output:**  
+Provided Git commands and repository setup guidance.
+
+**AI Mistake:**  
+The local and remote repositories initially had different commit histories.
+
+**Fix:**  
+Used `git pull --rebase origin main` to synchronize the histories before pushing changes.
+
+## 4. Dependency and Environment Management
+
+**Date:** 2026-11-04
+
+**Prompt Summary:**  
+Help manage Python dependencies, create requirements.txt, and protect environment variables and sensitive configuration.
+
+**AI Output:**  
+Provided dependency management instructions and `.gitignore` configuration.
+
+**Fix:**  
+Created a requirements file and excluded sensitive environment files from Git tracking.
+
+## 5. Threat Modeling and Audit Trail Security
 
 **Date:** 2026-11-05
 
-**Prompt summary:** Help implement secure document upload, sharing, and downloading with owner and viewer roles.
+**Prompt Summary:**  
+Improve TrustVault security by implementing audit logging, denied-access tracking, and audit integrity verification.
 
-**AI output:** Suggested Django views, forms, templates, and permission checks.
+**AI Output:**  
+Provided audit logging guidance and a SHA-256 hash-chain verification approach.
 
-**AI mistake / limitation:** Initial implementation guidance did not sufficiently emphasize testing unauthorized direct URL access.
+**AI Limitation:**  
+A hash chain alone does not guarantee complete protection against privileged database-level modifications.
 
-**Fix:** Added server-side role and document permission checks and tests for unauthorized viewer actions and document ownership isolation.
+**Fix:**  
+Added hash-chain verification and documented the remaining security limitations. Further hardening, such as external immutable audit storage, is a possible future improvement.
 
-**Related commit:** https://github.com/kumari95563/TrustVault/commit/c957ae1
-
-## 3. GitHub repository setup
-
-**Date:** 2026-11-06
-
-**Prompt summary:** Help publish the local TrustVault Django project to a public GitHub repository.
-
-**AI output:** Suggested Git initialization, remote configuration, commit, pull, and push commands.
-
-**AI mistake / limitation:** The initial push instructions did not account for the README commit already present on GitHub.
-
-**Fix:** Pulled the remote changes using `git pull --rebase origin main`, resolved the repository history, and pushed successfully.
-
-**Related commit:** https://github.com/kumari95563/TrustVault/commit/6896540
-
-## 4. Dependency and environment management
+## 6. Secure Invitation-Based Registration
 
 **Date:** 2026-11-07
 
-**Prompt summary:** Help prepare the project dependencies and protect environment secrets before publishing the repository.
+**Prompt Summary:**  
+Implement administrator-controlled user registration through secure invitation links with assigned roles.
 
-**AI output:** Suggested generating `requirements.txt`, using environment variables, and adding sensitive files to `.gitignore`.
+**AI Output:**  
+Provided invitation model, invitation creation, registration views, templates, URL configuration, and test cases.
 
-**AI mistake / limitation:** The initial setup did not provide a complete dependency file for reproducing the environment.
+**AI Limitation:**  
+The initial implementation required additional verification for invitation reuse, expiration, and unauthorized invitation creation.
 
-**Fix:** Generated `requirements.txt` using `pip freeze` and checked that `.env`, the virtual environment, the database, and private uploaded files were ignored by Git.
+**Fix:**  
+Added one-time invitation validation, 24-hour expiration, server-side role assignment, access restrictions, and invitation tests.
 
-**Related commit:** https://github.com/kumari95563/TrustVault/commit/1539293
+**Related Commit:** `9c3dd33`
 
-## 5. Threat modelling and audit security
+## 7. Password Reset and Email Configuration
 
-**Date:** 2026-11-07
+**Date:** 2026-11-08
 
-**Prompt summary:** Help identify TrustVault security threats, including unauthorized document access, permission misuse, revoked access, and audit log tampering.
+**Prompt Summary:**  
+Implement password reset functionality, configure email delivery, and record successful password resets in the audit trail.
 
-**AI output:** Suggested a threat model with security risks, mitigations, and remaining improvements.
+**AI Output:**  
+Provided Django password reset views, templates, Gmail SMTP configuration, and password-reset audit logging.
 
-**AI mistake / limitation:** A hash-linked audit log should not be described as completely tamper-proof because database-level changes can bypass ordinary model protections.
+**AI Limitation:**  
+Gmail SMTP worked locally, but live email delivery failed on Render Free because outbound SMTP port 587 is restricted.
 
-**Fix:** Documented this limitation and identified external append-only storage and stronger production database controls as future improvements.
+**Fix / Remaining Limitation:**  
+Kept the password reset implementation and documented the live email delivery limitation. Admin-managed password changes through Django Admin are available as an alternative. Live self-service email password reset is not currently confirmed working.
 
-**Related commit:** https://github.com/kumari95563/TrustVault/commit/a6a4958
+**Related Commit:** `9c3dd33`
 
----
+## Testing and Verification
+
+The project was tested locally using Django's automated test framework.
+
+- **Total test cases passed:** 24
+- Admin, Owner, and Viewer login tested.
+- Document upload and sharing tested.
+- Viewer download permission tested.
+- Permission revocation tested.
+- Direct download after revocation tested (HTTP 403).
+- Denied-access audit logging tested.
+- Invitation creation and registration tested.
+- Invitation reuse and expiration tested.
+- Audit hash-chain verification tested.
 
 ## AI Usage Declaration
 
-AI tools were used as development assistance for code suggestions, debugging, documentation, test planning, and Git commands. The generated suggestions were reviewed, tested, and corrected during implementation.
+AI tools were used as development assistants for understanding Django concepts, debugging errors, generating initial code suggestions, improving security checks, and preparing test cases.
 
-AI assistance did not replace testing or security verification. The project was tested locally, and the automated test suite passed 19 tests.
+The generated suggestions were reviewed, modified, integrated, and tested during development. AI assistance was not treated as a replacement for understanding or verifying the implementation.
 
-**Note:** The current implementation still requires further production hardening, including additional security tests and deployment configuration.
+The developer remains responsible for the submitted code, project functionality, testing, and explanation of the implementation.
