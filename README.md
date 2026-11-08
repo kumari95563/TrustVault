@@ -132,6 +132,23 @@ Gmail SMTP works in local development. However, live email delivery through Gmai
 
 Administrators can change user passwords through Django Admin as an alternative.
 
+## 🔑 Demo Login Instructions
+
+The application supports three user roles:
+
+- **Administrator:** Manages users, invitations, documents, and audit records.
+- **Document Owner:** Uploads documents and manages sharing permissions.
+- **Document Viewer:** Accesses documents explicitly shared with them.
+
+### How to Access
+
+1. Open the live application: https://trustvault-hkxp.onrender.com/
+2. Navigate to the login page.
+3. Use the demo account credentials provided separately by the project developer.
+4. Explore the features available for each role.
+
+**Security Note:** Demo credentials are not published in this repository. Each role has separate access permissions.
+
 ## 🌐 Live Deployment
 
 **Live Application:** https://trustvault-hkxp.onrender.com/
